@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A NEW CHANCE — Help Lena Find Her Voice</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="game" role="application" aria-label="A New Chance interactive classroom game">
+  <div id="backdrop"></div>
+  <!-- The video plays here. The file is set from script.js (see VIDEO_BEFORE / VIDEO_AFTER) -->
+  <video id="video" playsinline preload="auto"></video>
+  <div id="shade"></div>
+  <button id="skipBtn" class="hidden" type="button">SKIP VIDEO</button>
+  <header>
+    <div class="brand">A NEW CHANCE</div>
+    <div class="progress-wrap"><div class="progress"><div id="progressFill"></div></div><div id="progressText">0 / 5</div></div>
+    <div class="level" id="levelLabel">INTRO</div>
+  </header>
+  <main><section class="panel" id="panel" aria-live="polite"></section></main>
+  <footer><div id="sceneTag">A CLASSROOM STORY · HELP LENA FIND HER VOICE</div><div id="soundHint">PRESENTER CONTROLLED</div></footer>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
