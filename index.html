@@ -1,25 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A NEW CHANCE — Help Lena Find Her Voice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A NEW CHANCE — Interactive Cinematic Game</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="game" role="application" aria-label="A New Chance interactive classroom game">
-  <div id="backdrop"></div>
-  <!-- The video plays here. The file is set from script.js (see VIDEO_BEFORE / VIDEO_AFTER) -->
-  <video id="video" playsinline preload="auto"></video>
-  <div id="shade"></div>
-  <button id="skipBtn" class="hidden" type="button">SKIP VIDEO</button>
-  <header>
-    <div class="brand">A NEW CHANCE</div>
-    <div class="progress-wrap"><div class="progress"><div id="progressFill"></div></div><div id="progressText">0 / 5</div></div>
-    <div class="level" id="levelLabel">INTRO</div>
-  </header>
-  <main><section class="panel" id="panel" aria-live="polite"></section></main>
-  <footer><div id="sceneTag">A CLASSROOM STORY · HELP LENA FIND HER VOICE</div><div id="soundHint">PRESENTER CONTROLLED</div></footer>
+<div id="game">
+
+ <!-- Background videos (two layers so scenes can cross-fade) -->
+ <div class="bg" id="bg">
+  <video id="bgA" class="bgVideo" muted loop playsinline preload="auto"></video>
+  <video id="bgB" class="bgVideo" muted loop playsinline preload="auto"></video>
+  <div class="bgShade"></div>
+ </div>
+
+ <header class="top">
+  <div class="brand">A <span>NEW CHANCE</span></div>
+  <div class="status" id="status">INTERACTIVE STORY · IDENTITY × AGENCY</div>
+ </header>
+ <div class="progress"><i id="progress"></i></div>
+
+ <div class="sceneTag" id="sceneTag">CINEMATIC STORY</div>
+
+ <!-- Mission sheet: pops up from the bottom -->
+ <main class="sheet" id="sheet">
+  <div class="dialogue" id="dialogue"><small id="speaker">NARRATOR</small><span id="line">A new school day. A new chance.</span></div>
+  <div class="sheetBody">
+   <section class="info">
+    <div class="kicker" id="kicker">WELCOME TO THE STORY</div>
+    <h1 id="heading">A NEW CHANCE</h1>
+    <p id="description">Lena believes she is a weak English learner. Today, your choices and her actions will shape what happens next.</p>
+   </section>
+   <section class="choices">
+    <div class="prompt" id="prompt">Your mission: help Lena discover that she has a voice worth sharing.</div>
+    <div class="buttons" id="buttons"><button class="primary center" onclick="startGame()">▶ START GAME</button></div>
+   </section>
+  </div>
+  <footer class="foot"><span id="footLeft">5 MISSIONS · CLASSROOM STORY</span><span>Made for S5 · Use audience participation</span></footer>
+ </main>
+
+ <!-- Audience participation overlay -->
+ <div class="overlay hidden" id="overlay"><div class="overlayCard" id="overlayCard"></div></div>
+
+ <!-- Cutscene controls (the cutscene video itself plays in the background layer) -->
+ <div class="cutUI hidden" id="cutUI">
+  <div class="cutLabel" id="cutLabel"></div>
+  <button class="cutBtn center hidden" id="cutPlay" onclick="cutPlayClick()">▶ TAP TO PLAY</button>
+  <button class="cutSkip" onclick="finishCutscene()">SKIP ▸▸</button>
+ </div>
 </div>
 <script src="script.js"></script>
 </body>

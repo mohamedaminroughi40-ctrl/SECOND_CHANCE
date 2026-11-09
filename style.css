@@ -1,380 +1,73 @@
-:root {
-    --white: #f7f5f3;
-    --muted: #d5d0cf;
-    --purple: #b6a1db;
-    --teal: #8dd8d2;
-    --panel: rgba(23, 24, 29, .66)
-}
+:root{--ink:#f4f4f7;--muted:#b8c1d2;--gold:#f6c76a;--blue:#7bc6f8;--bg:#080d18;--panel:#101b2b;--green:#62e0ad;--red:#ff7c87}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#050810;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
 
-* {
-    box-sizing: border-box
-}
+/* ===== Game frame: full screen ===== */
+#game{position:fixed;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 10%,#21314a 0,#0a1020 45%,#050810 100%)}
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    background: #15171b;
-    color: var(--white);
-    font-family: Inter, Segoe UI, Arial, sans-serif;
-    overflow: hidden
-}
+/* ===== Background videos ===== */
+.bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease}
+.bgVideo.on{opacity:1}
+.bgShade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#050810f0 0,#050810a0 32%,transparent 62%),linear-gradient(180deg,#050810cc,transparent 22%)}
 
-body {
-    display: grid;
-    place-items: center
-}
+/* ===== Top bar ===== */
+.top{position:absolute;top:0;left:0;right:0;z-index:4;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 17px;background:#0a1220b3;backdrop-filter:blur(8px);border-bottom:1px solid #2c3b50}
+.brand{font-weight:900;letter-spacing:.18em;font-size:clamp(12px,2.5vw,17px)}.brand span{color:var(--gold)}
+.status{color:var(--muted);font-size:12px;text-align:right}
+.progress{position:absolute;top:50px;left:0;right:0;z-index:4;height:4px;background:#263247}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--gold));transition:width .5s}
+.sceneTag{position:absolute;top:70px;left:20px;z-index:3;padding:7px 10px;border:1px solid #ffffff40;border-radius:30px;background:#09101acc;font-size:11px;letter-spacing:.12em;font-weight:800}
 
-#game {
-    position: relative;
-    width: min(100vw, 177.7778vh);
-    height: min(100vh, 56.25vw);
-    aspect-ratio: 16/9;
-    overflow: hidden;
-    background: #252329
-}
+/* ===== Mission sheet (pops from the bottom) ===== */
+.sheet{position:absolute;z-index:3;left:50%;bottom:0;width:min(1120px,100%);max-height:78vh;overflow-y:auto;
+ transform:translate(-50%,105%);border:1px solid #3d506b;border-bottom:0;border-radius:24px 24px 0 0;
+ background:linear-gradient(160deg,#142033f2,#0d1522f5);backdrop-filter:blur(10px);box-shadow:0 -20px 70px #000a}
+.sheet.pop{animation:popUp .7s cubic-bezier(.2,.9,.25,1.05) forwards}
+.sheet.hide{animation:popDown .45s ease-in forwards}
+@keyframes popUp{from{transform:translate(-50%,105%)}to{transform:translate(-50%,0)}}
+@keyframes popDown{from{transform:translate(-50%,0)}to{transform:translate(-50%,105%)}}
+.dialogue{margin:18px 22px 0;padding:14px 17px;border:1px solid #ffffff30;border-radius:14px;background:#080d18df;font-size:clamp(15px,2.4vw,20px);line-height:1.45}
+.dialogue small{display:block;color:var(--gold);font-size:10px;letter-spacing:.16em;margin-bottom:6px;font-weight:900}
+.sheetBody{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(16px,3vw,32px);padding:clamp(16px,3vw,26px) clamp(18px,3vw,28px)}
+.info,.choices{display:flex;flex-direction:column;justify-content:center;gap:12px}
+.kicker{color:var(--gold);font-size:11px;letter-spacing:.2em;font-weight:900;text-transform:uppercase}
+h1,h2{margin:0;line-height:1.1}h1{font-size:clamp(26px,4.4vw,44px);letter-spacing:-.04em}h2{font-size:clamp(21px,3.4vw,31px)}
+p{margin:0;color:#d0d8e4;line-height:1.55;font-size:14px}
+.prompt{padding:13px;border-left:3px solid var(--gold);background:#ffffff08;color:#e9eef6;font-size:14px;line-height:1.5}
+.buttons{display:grid;gap:9px;margin-top:3px}
+button{font:inherit;color:var(--ink);border:1px solid #50617b;background:#1a2a40;padding:13px 15px;border-radius:12px;font-weight:800;text-align:left;cursor:pointer;transition:transform .15s,border .15s,background .15s}
+button:hover{transform:translateY(-2px);border-color:var(--blue);background:#223954}button:active{transform:scale(.98)}
+button.primary{background:linear-gradient(110deg,#e9b856,#f4d58e);color:#101827;border:0;text-align:center}
+button.good{border-color:#2f9b75;background:#10372f}button.bad{border-color:#a84e5c;background:#3b2029}
+button.center{text-align:center}
+.foot{display:flex;justify-content:space-between;gap:8px;color:#8392a8;font-size:11px;padding:10px 22px;background:#08101bcc;border-top:1px solid #26364a}
 
-/* BACKGROUND IMAGE
-   The original file had the classroom photo embedded as a huge base64 string.
-   Save that image as "classroom.jpg" in the same folder as this file.
-   (Or replace the url("classroom.jpg") below with your own data: URI.) */
-#backdrop {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(90deg, rgba(10, 12, 17, .50), rgba(10, 12, 17, .18) 48%, rgba(10, 12, 17, .43)), linear-gradient(0deg, rgba(10, 12, 17, .68), rgba(10, 12, 17, .08) 54%, rgba(10, 12, 17, .42)), url("classroom.jpg");
-    background-size: cover;
-    background-position: center 43%;
-    transform: scale(1.015);
-    transition: filter .5s
-}
+/* ===== Audience overlay ===== */
+.overlay{position:absolute;inset:0;z-index:6;background:#050912e6;display:flex;align-items:center;justify-content:center;padding:22px;text-align:center}
+.overlayCard{max-width:620px;width:100%;padding:clamp(20px,4vw,38px);border:1px solid #52647d;border-radius:20px;background:linear-gradient(150deg,#17243a,#0b1220);box-shadow:0 25px 80px #0009}
+.overlayCard h2{font-size:clamp(28px,5vw,44px);margin:9px 0 13px}.overlayCard p{margin:0 auto 18px;max-width:500px}
+.count{font-size:clamp(50px,12vw,100px);font-weight:1000;color:var(--gold);line-height:1;text-shadow:0 0 35px #f6c76a55}
+.chant{font-size:clamp(24px,5vw,46px);font-weight:1000;letter-spacing:.04em;color:#fff;text-shadow:0 0 24px #7bc6f888;animation:pulse .7s ease-in-out infinite alternate}
+@keyframes pulse{to{transform:scale(1.05);color:var(--gold)}}
 
-/* VIDEO: sits on top of the photo, under the game panel */
-#video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background: #000;
-    display: none
-}
+/* ===== Cutscene controls (video plays in the background) ===== */
+.cutUI{position:absolute;inset:0;z-index:7;pointer-events:none}
+.cutUI>*{pointer-events:auto}
+.cutLabel{position:absolute;left:20px;bottom:20px;padding:7px 12px;border:1px solid #ffffff40;border-radius:30px;background:#09101acc;font-size:11px;letter-spacing:.14em;font-weight:800}
+.cutBtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:16px 28px;background:linear-gradient(110deg,#e9b856,#f4d58e);color:#101827;border:0;font-size:16px}
+.cutBtn:hover{transform:translate(-50%,-52%)}
+.cutSkip{position:absolute;bottom:18px;right:18px;padding:9px 14px;font-size:12px;letter-spacing:.1em;background:#09101acc}
+.bgShade{transition:opacity .6s}
+#game.cutting .bgShade{opacity:.15}
+#game.cutting .sceneTag{opacity:0}
+.sceneTag{transition:opacity .4s}
+.hidden{display:none!important}
 
-#video.show {
-    display: block
-}
-
-#skipBtn {
-    position: absolute;
-    right: 7%;
-    bottom: 9%;
-    z-index: 3;
-    padding: 9px 16px;
-    background: rgba(15, 16, 21, .55)
-}
-
-#shade {
-    position: absolute;
-    inset: 0;
-    background: rgba(12, 14, 20, .16);
-    pointer-events: none
-}
-
-header {
-    position: absolute;
-    top: 4.5%;
-    left: 5%;
-    right: 5%;
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    align-items: center;
-    gap: 22px;
-    z-index: 2
-}
-
-.brand {
-    font-size: clamp(11px, 1.2vw, 18px);
-    font-weight: 800;
-    letter-spacing: .19em;
-    text-shadow: 0 2px 12px #000
-}
-
-.progress-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px
-}
-
-.progress {
-    height: 4px;
-    background: rgba(255, 255, 255, .25);
-    border-radius: 20px;
-    flex: 1;
-    overflow: hidden
-}
-
-#progressFill {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--purple), var(--teal));
-    border-radius: 20px;
-    transition: width .6s ease
-}
-
-#progressText {
-    font-size: clamp(9px, .8vw, 12px);
-    color: #eee;
-    letter-spacing: .12em;
-    white-space: nowrap
-}
-
-.level {
-    justify-self: end;
-    font-size: clamp(10px, 1vw, 14px);
-    letter-spacing: .16em;
-    color: #fff;
-    background: rgba(15, 16, 21, .48);
-    border: 1px solid rgba(255, 255, 255, .2);
-    padding: 9px 13px;
-    border-radius: 5px
-}
-
-main {
-    position: absolute;
-    left: 7%;
-    right: 7%;
-    top: 19%;
-    bottom: 13%;
-    display: flex;
-    align-items: flex-end;
-    z-index: 1
-}
-
-.panel {
-    width: min(650px, 66%);
-    padding: clamp(18px, 2.8vw, 38px);
-    background: var(--panel);
-    border: 1px solid rgba(255, 255, 255, .18);
-    border-left: 3px solid var(--purple);
-    border-radius: 7px;
-    backdrop-filter: blur(9px);
-    box-shadow: 0 18px 55px rgba(0, 0, 0, .24);
-    animation: arrive .55s ease both
-}
-
-.eyebrow {
-    font-size: clamp(9px, .85vw, 12px);
-    font-weight: 700;
-    letter-spacing: .22em;
-    color: var(--teal);
-    margin-bottom: 13px
-}
-
-h1 {
-    font-size: clamp(25px, 3.2vw, 48px);
-    line-height: 1.03;
-    letter-spacing: -.035em;
-    margin: 0 0 16px;
-    font-weight: 750
-}
-
-.message {
-    font-size: clamp(13px, 1.35vw, 19px);
-    line-height: 1.5;
-    color: #f0eeee;
-    margin: 0;
-    max-width: 58ch
-}
-
-.callout {
-    margin-top: 20px;
-    color: #fff;
-    font-size: clamp(12px, 1.2vw, 17px);
-    font-weight: 800;
-    letter-spacing: .09em
-}
-
-.quote {
-    margin-top: 16px;
-    padding: 12px 15px;
-    border-left: 2px solid var(--teal);
-    background: rgba(255, 255, 255, .07);
-    font-size: clamp(13px, 1.25vw, 18px);
-    line-height: 1.45
-}
-
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 24px
-}
-
-button {
-    appearance: none;
-    border: 1px solid rgba(255, 255, 255, .32);
-    border-radius: 4px;
-    padding: 12px 21px;
-    background: rgba(255, 255, 255, .08);
-    color: #fff;
-    font-size: clamp(10px, 1vw, 14px);
-    font-weight: 750;
-    letter-spacing: .12em;
-    cursor: pointer;
-    transition: transform .18s, background .18s, border-color .18s
-}
-
-button:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, .16);
-    border-color: var(--teal)
-}
-
-button.primary {
-    background: #f3f0f2;
-    color: #22232a;
-    border-color: #f3f0f2
-}
-
-button.primary:hover {
-    background: var(--teal);
-    border-color: var(--teal)
-}
-
-button:focus-visible {
-    outline: 3px solid var(--teal);
-    outline-offset: 3px
-}
-
-.options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 20px
-}
-
-.option {
-    padding: 17px;
-    background: rgba(255, 255, 255, .07);
-    border: 1px solid rgba(255, 255, 255, .24);
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: left
-}
-
-.option strong {
-    display: block;
-    font-size: clamp(12px, 1.15vw, 16px);
-    letter-spacing: .1em;
-    margin-bottom: 8px
-}
-
-.option span {
-    display: block;
-    color: #e1dddf;
-    font-size: clamp(11px, 1vw, 14px);
-    line-height: 1.4
-}
-
-.option.selected {
-    border-color: var(--teal);
-    background: rgba(92, 176, 170, .2);
-    box-shadow: 0 0 0 1px var(--teal) inset
-}
-
-#feedback {
-    margin-top: 13px;
-    color: var(--teal);
-    font-size: clamp(11px, 1vw, 14px);
-    line-height: 1.4;
-    min-height: 1.4em
-}
-
-footer {
-    position: absolute;
-    left: 7%;
-    right: 7%;
-    bottom: 4.5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 2;
-    color: rgba(255, 255, 255, .78);
-    font-size: clamp(9px, .8vw, 12px);
-    letter-spacing: .12em
-}
-
-#sceneTag {
-    max-width: 55%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis
-}
-
-#soundHint {
-    opacity: .8
-}
-
-.hidden {
-    display: none !important
-}
-
-@keyframes arrive {
-    from {
-        opacity: 0;
-        transform: translateY(12px)
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0)
-    }
-}
-
-@media(max-width:650px) {
-    #game {
-        width: 100vw;
-        height: 56.25vw;
-        min-height: 100vh;
-        aspect-ratio: auto
-    }
-
-    #backdrop {
-        background-position: 48% center
-    }
-
-    header {
-        top: 3%;
-        left: 4%;
-        right: 4%;
-        grid-template-columns: 1fr 1.2fr 1fr;
-        gap: 8px
-    }
-
-    main {
-        left: 4%;
-        right: 4%;
-        top: 15%;
-        bottom: 12%;
-        align-items: flex-end
-    }
-
-    .panel {
-        width: 100%;
-        padding: 14px
-    }
-
-    .options {
-        gap: 7px
-    }
-
-    .option {
-        padding: 10px
-    }
-
-    footer {
-        left: 4%;
-        right: 4%;
-        bottom: 3%
-    }
+@media(max-width:760px){
+ .sheetBody{grid-template-columns:1fr;gap:12px}
+ .sheet{max-height:82vh;border-radius:20px 20px 0 0}
+ .dialogue{margin:14px 14px 0}.sheetBody{padding:14px}.foot{padding:10px 14px}
+ .top{padding:12px}.sceneTag{left:12px}
 }
