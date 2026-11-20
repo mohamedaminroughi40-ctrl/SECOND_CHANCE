@@ -175,10 +175,10 @@ function showWelcome() {
 function startGame() { step = 1; go(1); }
 
 function mission1() {
-  setScene("MISSION 1 · FIRST OPPORTUNITY", "TEACHER", "Lena, would you like to answer this question?", "mission1");
-  setUI("MISSION 1 · FIRST OPPORTUNITY", "The teacher calls on Lena",
-    "Lena knows the answer. But her heart beats faster, and she is afraid of making a mistake.",
-    "The scene pauses on Lena’s hesitant expression. What should the class do?",
+  setScene("MISSION 1 · FIRST OPPORTUNITY", "MISSION 1 · FIRST OPPORTUNITY", "", "mission1");
+  setUI("", "The teacher calls on Lena",
+    "Lena is caught between knowing the answer and finding the courage to speak.",
+    "Should we step in and help Lena, or let her make her own choice?",
     `<button class="good" onclick="helpLena()">YES — LET’S HELP LENA</button><button onclick="letDecide()">LET LENA DECIDE</button>`);
 }
 let callVideoSeen = false;
@@ -210,10 +210,10 @@ function beginCount() {
         closeOverlay();
         afterCountdown(() => {
           step = 2;
-          setScene("MISSION COMPLETE · FIRST COURAGE", "LENA", "Okay… I’ll try. The answer is…");
-          setUI("MISSION COMPLETE", "She raises her hand!",
-            "Your encouragement helped create a supportive moment. Lena still chose to take the action herself.",
-            "Identity can influence agency — and support can make action feel possible.",
+          setScene("MISSION COMPLETE · FIRST COURAGE", "MISSION COMPLETE", "");
+          setUI("", "Well done",
+            "Lena overcame her hesitation and took the first step by raising her hand",
+            "Sometimes, a little encouragement is all someone needs to take the first step.",
             `<button class="primary center" onclick="afterMission(1)">CONTINUE TO MISSION 2 →</button>`);
           $("progress").style.width = "40%";
         });
@@ -235,19 +235,22 @@ function missed() {
     `<button class="primary center" onclick="mission1()">↺ REWIND SCENE</button>`);
 }
 
+
 function mission2() {
   step = 2;
-  setScene("MISSION 2 · A MISTAKE", "LENA", "Yesterday, I go to the library.", "mission2");
-  setUI("MISSION 2 · MISTAKES ARE PART OF LEARNING", "Lena makes a mistake",
-    "She said “go” instead of “went.” The camera freezes. What should Lena do now?", "Choose her next action:",
+  setScene("", "MISSION 2 · MISTAKES ARE PART OF LEARNING", "", "mission2");
+  setUI("", "Lena makes a mistake",
+    " ", "Choose her next action:",
     `<button class="good" onclick="tryAgain()">A. TRY AGAIN — CORRECT THE SENTENCE</button><button class="bad" onclick="giveUp()">B. GIVE UP — STOP PARTICIPATING</button>`);
 }
+
+
 function tryAgain() {
   corrected = true; step = 3;
-  setScene("MISSION 2 · TRY AGAIN", "LENA", "Yesterday, I went to the library. Oh! I corrected it.");
-  setUI("MISSION COMPLETE · FIRST ACHIEVEMENT UNLOCKED", "She corrects herself!",
+  setScene("MISSION 2 · TRY AGAIN", "MISSION COMPLETE · FIRST ACHIEVEMENT UNLOCKED", "");
+  setUI("", "She corrects herself",
     "Lena notices that a mistake is not proof that she cannot learn. It is part of learning.",
-    "Achievement unlocked: “I made a mistake, but I corrected it. I can improve.”",
+    "Achievement unlocked: I made a mistake, but I corrected it. I can improve.",
     `<button class="primary center" onclick="afterMission(2)">CONTINUE TO MISSION 3 →</button>`);
   $("progress").style.width = "60%";
 }
@@ -261,8 +264,8 @@ function giveUp() {
 
 function mission3() {
   step = 3;
-  setScene("MISSION 3 · THE CLASSROOM", "NARRATOR", "The teacher invites Lena to share another idea.", "mission3");
-  setUI("MISSION 3 · ENVIRONMENT MATTERS", "Choose Lena’s classroom",
+  setScene("MISSION 3 · THE CLASSROOM", "MISSION 3 · ENVIRONMENT MATTERS", "", "mission3");
+  setUI("", "Choose Lena’s classroom",
     "The classroom environment can either restrict or support her agency. Choose the scene you want Lena to experience.",
     "Which environment should she learn in?",
     `<button class="bad" onclick="envA()">A. UNSUPPORTIVE CLASSROOM</button><button class="good" onclick="envB()">B. SUPPORTIVE CLASSROOM</button>`);
@@ -277,20 +280,20 @@ function envA() {
 }
 function envB() {
   environment = "supportive";
-  setScene("ENVIRONMENT B · SUPPORTIVE", "TEACHER", "Take your time, Lena. We’re listening.", "envB");
-  setUI("ENVIRONMENT B", "Lena feels supported",
+  setScene("ENVIRONMENT B · SUPPORTIVE", "ENVIRONMENT B", "", "envB");
+  setUI("", "Lena feels supported",
     "Her classmates listen respectfully. The teacher gives her time. Lena shares her idea, even though she is not completely sure.",
-    "A supportive environment opens space for agency — Lena still takes the action.",
+    "A supportive environment opens space for agency  Lena still takes the action.",
     `<button class="primary center" onclick="afterMission(3)">CONTINUE TO MISSION 4 →</button>`);
 }
 
 function mission4() {
   step = 4;
-  setScene("MISSION 4 · A NEW CHANCE", "TEACHER", "Who can tell us another example?", "mission4");
-  setUI("MISSION 4 · TAKE THE INITIATIVE", "Lena acts on her own",
-    "No one prompts her. Lena remembers that she can learn and improve. She raises her hand by herself.",
-    "What happens next?",
-    `<button class="good" onclick="independent()">LET LENA PARTICIPATE</button><button onclick="pauseMoment()">PAUSE — SHOW HER INNER THOUGHT</button>`);
+  setScene("MISSION 4 · TAKE THE INITIATIVE", "TAKE THE INITIATIVE", "", "mission4");
+  setUI("", "Has Lena's classroom experience changed the way she sees herself as a learner?",
+    "",
+    "Guess what happens next?",
+    `<button class="good" onclick="independent()">Lena trusts herself and speaks up</button><button onclick="pauseMoment()">Lena doubts herself and stays quiet</button>`);
 }
 function pauseMoment() {
   setScene("INNER VOICE · LENA", "LENA’S INNER VOICE", "I might make mistakes, but I can learn. I have something to say.");
@@ -300,8 +303,8 @@ function pauseMoment() {
 }
 function independent() {
   step = 5;
-  setScene("MISSION COMPLETE · A NEW IDENTITY", "LENA", "I have an idea. May I share it?");
-  setUI("MISSION COMPLETE", "Lena raises her hand independently",
+  setScene("MISSION COMPLETE · A NEW IDENTITY", "MISSION COMPLETE", "");
+  setUI("", "Lena raises her hand independently",
     "Her agency has grown, and her identity is no longer fixed by her earlier belief.",
     "Identity and agency influence each other in a continuous relationship.",
     `<button class="primary center" onclick="afterMission(4)">▶ WATCH THE ENDING</button>`);
